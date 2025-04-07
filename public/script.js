@@ -67,8 +67,8 @@ function previewFile(file) {
   const reader = new FileReader();
   reader.onload = function (e) {
     originalImg.src = e.target.result;
-    originalImage = e.target.result;
-    resultImg.src = "/api/placeholder/400/320";
+    originalImage = file; // Lưu file gốc để gửi lên server
+    resultImg.src = ""; // Xóa ảnh kết quả cũ nếu có
     downloadBtn.style.display = "none";
   };
   reader.readAsDataURL(file);
@@ -78,20 +78,27 @@ function previewFile(file) {
 removeBtn.addEventListener("click", removeBackground);
 
 function removeBackground() {
+  if (!originalImage) {
+    alert("Vui lòng chọn một ảnh trước.");
+    return;
+  }
+
   const formData = new FormData();
-  formData.append("image_file", fileInput.files[0]);
+  formData.append("image", originalImage);
 
   removeBtn.disabled = true;
   removeBtn.textContent = "Đang xử lý...";
 
-  fetch("https://api.remove.bg/v1.0/removebg", {
+  fetch("/api/remove-background", {
     method: "POST",
-    headers: {
-      "X-Api-Key": "",
-    },
     body: formData,
   })
-    .then((response) => response.blob())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.blob();
+    })
     .then((blob) => {
       const url = URL.createObjectURL(blob);
       resultImg.src = url;

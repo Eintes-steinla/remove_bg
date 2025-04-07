@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./style.css" />
     <title>Công cụ xóa nền ảnh</title>
+    <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
     <div class="container">
@@ -33,15 +33,11 @@
       <div class="preview-section">
         <div class="preview-box">
           <h3>Ảnh gốc</h3>
-          <img id="originalImg" src="/api/placeholder/400/320" alt="Ảnh gốc" />
+          <img id="originalImg" src="#" alt="Ảnh gốc" />
         </div>
         <div class="preview-box">
           <h3>Ảnh đã xóa nền</h3>
-          <img
-            id="resultImg"
-            src="/api/placeholder/400/320"
-            alt="Ảnh đã xóa nền"
-          />
+          <img id="resultImg" src="#" alt="Ảnh đã xóa nền" />
         </div>
       </div>
 
@@ -52,14 +48,8 @@
       >
         Tải ảnh xuống
       </button>
-
-      <p class="note">
-        Lưu ý: Công cụ này sử dụng AI để xóa nền ảnh. Để hoạt động đầy đủ, bạn
-        cần API key từ dịch vụ xóa nền như remove.bg. Trong môi trường thực tế,
-        bạn cần tích hợp API key vào ứng dụng này.
-      </p>
     </div>
 
-    <script src="./main.js"></script>
+    <script src="./script.js"></script>
   </body>
 </html>
