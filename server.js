@@ -75,7 +75,7 @@ app.post("/api/remove-background", upload.single("image"), async (req, res) => {
 
 // Route mặc định cho trang chủ
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(path.join(__dirname, "./public", "index.html"));
 });
 
 // Khởi động server
