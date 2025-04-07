@@ -1,3 +1,69 @@
+const themeToggle = document.getElementById("themeToggle");
+const langToggle = document.getElementById("langToggle");
+const langDropdown = document.getElementById("langDropdown");
+const currentLangText = document.getElementById("currentLang");
+const html = document.documentElement;
+
+const languageNames = {
+  vi: "Tiếng Việt",
+  en: "English",
+  zh: "中文",
+};
+
+// Check for saved theme preference, otherwise use system preference
+if (
+  localStorage.theme === "dark" ||
+  (!("theme" in localStorage) &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches)
+) {
+  html.classList.add("dark");
+} else {
+  html.classList.remove("dark");
+}
+
+// Language management
+const setLanguage = (lang) => {
+  html.setAttribute("lang", lang);
+  document.querySelectorAll("[data-lang]").forEach((el) => {
+    if (el.dataset.lang === lang) {
+      el.classList.remove("hidden");
+    } else {
+      el.classList.add("hidden");
+    }
+  });
+  currentLangText.textContent = languageNames[lang];
+  localStorage.setItem("language", lang);
+  langDropdown.classList.add("hidden");
+};
+
+// Handle dropdown toggle
+langToggle.addEventListener("click", (e) => {
+  e.stopPropagation();
+  langDropdown.classList.toggle("hidden");
+});
+
+// Close dropdown when clicking outside
+document.addEventListener("click", () => {
+  langDropdown.classList.add("hidden");
+});
+
+// Handle language selection
+document.querySelectorAll("[data-lang-choice]").forEach((button) => {
+  button.addEventListener("click", (e) => {
+    setLanguage(e.target.dataset.langChoice);
+  });
+});
+
+// Initialize language
+const savedLang = localStorage.getItem("language") || "vi";
+setLanguage(savedLang);
+
+// Handle theme toggle
+themeToggle.addEventListener("click", () => {
+  html.classList.toggle("dark");
+  localStorage.theme = html.classList.contains("dark") ? "dark" : "light";
+});
+
 let originalImage = null;
 let resultImage = null;
 
@@ -29,13 +95,13 @@ function preventDefaults(e) {
 });
 
 function highlight() {
-  dropArea.style.borderColor = "#0078d7";
-  dropArea.style.backgroundColor = "#f0f8ff";
+  dropArea.classList.add("border-blue-600", "bg-blue-50");
+  dropArea.classList.remove("border-gray-300", "bg-white");
 }
 
 function unhighlight() {
-  dropArea.style.borderColor = "#ccc";
-  dropArea.style.backgroundColor = "white";
+  dropArea.classList.remove("border-blue-600", "bg-blue-50");
+  dropArea.classList.add("border-gray-300", "bg-white");
 }
 
 // Xử lý khi thả file
@@ -51,6 +117,16 @@ fileInput.addEventListener("change", function () {
   handleFiles(this.files);
 });
 
+function showError(viMsg, enMsg, zhMsg) {
+  const currentLang = html.getAttribute("lang");
+  const messages = {
+    vi: viMsg,
+    en: enMsg,
+    zh: zhMsg,
+  };
+  alert(messages[currentLang]);
+}
+
 function handleFiles(files) {
   if (files.length > 0) {
     const file = files[0];
@@ -58,7 +134,11 @@ function handleFiles(files) {
       previewFile(file);
       removeBtn.disabled = false;
     } else {
-      alert("Vui lòng chọn file ảnh.");
+      showError(
+        "Vui lòng chọn file ảnh.",
+        "Please select an image file.",
+        "请选择图片文件。"
+      );
     }
   }
 }
@@ -79,7 +159,11 @@ removeBtn.addEventListener("click", removeBackground);
 
 function removeBackground() {
   if (!originalImage) {
-    alert("Vui lòng chọn một ảnh trước.");
+    showError(
+      "Vui lòng chọn một ảnh trước.",
+      "Please select an image first.",
+      "请先选择一张图片。"
+    );
     return;
   }
 
@@ -87,7 +171,21 @@ function removeBackground() {
   formData.append("image", originalImage);
 
   removeBtn.disabled = true;
-  removeBtn.textContent = "Đang xử lý...";
+  const currentLang = html.getAttribute("lang");
+
+  const processingText = {
+    vi: "Đang xử lý...",
+    en: "Processing...",
+    zh: "处理中...",
+  };
+
+  const buttonText = {
+    vi: "Xóa nền ảnh",
+    en: "Remove Background",
+    zh: "去除背景",
+  };
+
+  removeBtn.textContent = processingText[currentLang];
 
   fetch("/api/remove-background", {
     method: "POST",
@@ -104,14 +202,18 @@ function removeBackground() {
       resultImg.src = url;
       resultImage = url;
 
-      removeBtn.textContent = "Xóa nền ảnh";
+      removeBtn.textContent = buttonText[currentLang];
       removeBtn.disabled = false;
       downloadBtn.style.display = "block";
     })
     .catch((error) => {
-      console.error("Lỗi:", error);
-      alert("Có lỗi xảy ra khi xóa nền ảnh.");
-      removeBtn.textContent = "Xóa nền ảnh";
+      console.error("Error:", error);
+      showError(
+        "Có lỗi xảy ra khi xóa nền ảnh.",
+        "An error occurred while removing the background.",
+        "去除背景时发生错误。"
+      );
+      removeBtn.textContent = buttonText[currentLang];
       removeBtn.disabled = false;
     });
 }

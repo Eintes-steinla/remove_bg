@@ -1,52 +1,177 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" class="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Công cụ xóa nền ảnh</title>
-    <link rel="stylesheet" href="./style.css" />
+    <title>removebg</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              exo: ['"Exo 2"', "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
   </head>
-  <body>
-    <div class="container">
-      <h1>Công cụ xóa nền ảnh</h1>
-
-      <div id="drop-area" class="upload-section">
-        <p>Kéo và thả ảnh vào đây hoặc</p>
-        <input
-          type="file"
-          id="fileInput"
-          accept="image/*"
-          style="display: none"
-        />
+  <body
+    class="flex justify-center items-center bg-gray-300 dark:bg-slate-800 min-h-screen font-exo"
+  >
+    <div
+      class="space-y-6 bg-gray-100 dark:bg-slate-700 shadow-xl m-4 p-5 rounded-3xl w-full max-w-[650px]"
+    >
+      <div class="flex justify-end items-center gap-4 w-full">
+        <div class="relative">
+          <button
+            id="langToggle"
+            class="flex items-center gap-2 bg-gray-200 dark:bg-slate-600 px-3 py-2 rounded-lg text-gray-800 dark:text-white"
+          >
+            <span id="currentLang">Tiếng Việt</span>
+            <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+              <path
+                fill-rule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+          <div
+            id="langDropdown"
+            class="hidden top-full absolute bg-white dark:bg-slate-600 shadow-lg mt-2 rounded-lg w-fit overflow-hidden"
+          >
+            <button
+              class="hover:bg-gray-100 dark:hover:bg-slate-500 px-3 py-2 w-full text-gray-800 dark:text-white text-left text-nowrap"
+              data-lang-choice="vi"
+            >
+              Tiếng Việt
+            </button>
+            <button
+              class="hover:bg-gray-100 dark:hover:bg-slate-500 px-3 py-2 w-full text-gray-800 dark:text-white text-left text-nowrap"
+              data-lang-choice="en"
+            >
+              English
+            </button>
+            <button
+              class="hover:bg-gray-100 dark:hover:bg-slate-500 px-3 py-2 w-full text-gray-800 dark:text-white text-left text-nowrap"
+              data-lang-choice="zh"
+            >
+              中文
+            </button>
+          </div>
+        </div>
         <button
-          class="button"
-          onclick="document.getElementById('fileInput').click()"
+          id="themeToggle"
+          class="bg-gray-200 dark:bg-slate-600 p-2 rounded-lg text-gray-800 dark:text-white"
         >
-          Chọn ảnh
+          <svg
+            class="hidden dark:block w-6 h-6"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+            />
+          </svg>
+          <svg
+            class="dark:hidden w-6 h-6"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
+            />
+          </svg>
         </button>
       </div>
 
-      <button id="removeBackgroundBtn" class="button" disabled>
-        Xóa nền ảnh
+      <h1
+        class="font-bold text-[clamp(30px,5vw,50px)] text-black dark:text-white text-center"
+      >
+        <span data-lang="vi">Công cụ xóa nền ảnh</span>
+        <span data-lang="en" class="hidden">Background remover tool</span>
+        <span data-lang="zh" class="hidden">图片背景去除工具</span>
+      </h1>
+
+      <div
+        id="drop-area"
+        class="space-y-4 p-8 border-2 border-gray-300 dark:border-gray-600 hover:border-blue-600 dark:hover:border-blue-500 border-dashed rounded-lg text-center transition-colors cursor-pointer"
+      >
+        <p class="text-black dark:text-white text-lg">
+          <span data-lang="vi">Kéo và thả ảnh vào đây hoặc</span>
+          <span data-lang="en" class="hidden">Drag and drop image here or</span>
+          <span data-lang="zh" class="hidden">拖放图片到这里或者</span>
+        </p>
+        <input type="file" id="fileInput" accept="image/*" class="hidden" />
+        <button
+          class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 px-5 py-2 border-none rounded text-white text-base transition-colors cursor-pointer"
+          onclick="document.getElementById('fileInput').click()"
+        >
+          <span data-lang="vi">Chọn ảnh</span>
+          <span data-lang="en" class="hidden">Choose Image</span>
+          <span data-lang="zh" class="hidden">选择图片</span>
+        </button>
+      </div>
+
+      <button
+        id="removeBackgroundBtn"
+        class="block bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 dark:bg-blue-500 dark:hover:bg-blue-600 dark:disabled:bg-gray-600 mx-auto px-5 py-2 border-none rounded text-white text-base transition-colors cursor-pointer disabled:cursor-not-allowed"
+        disabled
+      >
+        <span data-lang="vi">Xóa nền ảnh</span>
+        <span data-lang="en" class="hidden">Remove Background</span>
+        <span data-lang="zh" class="hidden">去除背景</span>
       </button>
 
-      <div class="preview-section">
-        <div class="preview-box">
-          <h3>Ảnh gốc</h3>
-          <img id="originalImg" src="#" alt="Ảnh gốc" />
+      <div
+        class="justify-between gap-6 sm:gap-4 grid grid-cols-1 sm:grid-cols-2 grid-rows-2 sm:grid-rows-1"
+      >
+        <div
+          class="space-y-3 p-3 border border-gray-300 dark:border-gray-600 rounded w-full"
+        >
+          <h3 class="text-black dark:text-white text-center">
+            <span data-lang="vi">Ảnh gốc</span>
+            <span data-lang="en" class="hidden">Original Image</span>
+            <span data-lang="zh" class="hidden">原始图片</span>
+          </h3>
+          <img
+            id="originalImg"
+            src="#"
+            alt=""
+            class="block max-w-full h-auto"
+          />
         </div>
-        <div class="preview-box">
-          <h3>Ảnh đã xóa nền</h3>
-          <img id="resultImg" src="#" alt="Ảnh đã xóa nền" />
+        <div
+          class="space-y-3 p-3 border border-gray-300 dark:border-gray-600 rounded w-full"
+        >
+          <h3 class="text-black dark:text-white text-center">
+            <span data-lang="vi">Ảnh đã xóa nền</span>
+            <span data-lang="en" class="hidden">Processed Image</span>
+            <span data-lang="zh" class="hidden">处理后的图片</span>
+          </h3>
+          <img
+            id="resultImg"
+            src="#"
+            alt=""
+            class="block w-full max-w-full h-auto"
+          />
         </div>
       </div>
 
       <button
         id="downloadBtn"
-        class="button download-button"
-        style="display: none"
+        class="hidden bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 mx-auto px-5 py-2 border-none rounded text-white text-base transition-colors cursor-pointer"
       >
-        Tải ảnh xuống
+        <span data-lang="vi">Tải ảnh xuống</span>
+        <span data-lang="en" class="hidden">Download Image</span>
+        <span data-lang="zh" class="hidden">下载图片</span>
       </button>
     </div>
 
