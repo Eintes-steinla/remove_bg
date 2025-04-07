@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Công cụ xóa nền ảnh</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Công cụ xóa nền ảnh</h1>
+
+      <div id="drop-area" class="upload-section">
+        <p>Kéo và thả ảnh vào đây hoặc</p>
+        <input
+          type="file"
+          id="fileInput"
+          accept="image/*"
+          style="display: none"
+        />
+        <button
+          class="button"
+          onclick="document.getElementById('fileInput').click()"
+        >
+          Chọn ảnh
+        </button>
+      </div>
+
+      <button id="removeBackgroundBtn" class="button" disabled>
+        Xóa nền ảnh
+      </button>
+
+      <div class="preview-section">
+        <div class="preview-box">
+          <h3>Ảnh gốc</h3>
+          <img id="originalImg" src="/api/placeholder/400/320" alt="Ảnh gốc" />
+        </div>
+        <div class="preview-box">
+          <h3>Ảnh đã xóa nền</h3>
+          <img
+            id="resultImg"
+            src="/api/placeholder/400/320"
+            alt="Ảnh đã xóa nền"
+          />
+        </div>
+      </div>
+
+      <button
+        id="downloadBtn"
+        class="button download-button"
+        style="display: none"
+      >
+        Tải ảnh xuống
+      </button>
+
+      <p class="note">
+        Lưu ý: Công cụ này sử dụng AI để xóa nền ảnh. Để hoạt động đầy đủ, bạn
+        cần API key từ dịch vụ xóa nền như remove.bg. Trong môi trường thực tế,
+        bạn cần tích hợp API key vào ứng dụng này.
+      </p>
+    </div>
+
+    <script src="./main.js"></script>
+  </body>
+</html>
