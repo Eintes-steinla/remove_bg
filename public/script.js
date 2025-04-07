@@ -223,7 +223,7 @@ downloadBtn.addEventListener("click", function () {
   if (resultImage) {
     const a = document.createElement("a");
     a.href = resultImage;
-    a.download = "anh-da-xoa-nen.png";
+    a.download = "removebg.png";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
