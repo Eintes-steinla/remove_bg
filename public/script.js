@@ -187,7 +187,7 @@ function removeBackground() {
 
   removeBtn.textContent = processingText[currentLang];
 
-  fetch("/api/remove-background", {
+  fetch("./api/remove-background", {
     method: "POST",
     body: formData,
   })
