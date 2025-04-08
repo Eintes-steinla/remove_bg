@@ -229,3 +229,118 @@ downloadBtn.addEventListener("click", function () {
     document.body.removeChild(a);
   }
 });
+
+// Image Preview Controls
+const previewModal = document.getElementById("previewModal");
+const previewImage = document.getElementById("previewImage");
+const closePreview = document.getElementById("closePreview");
+const zoomIn = document.getElementById("zoomIn");
+const zoomOut = document.getElementById("zoomOut");
+const resetZoom = document.getElementById("resetZoom");
+
+let scale = 1;
+let panning = false;
+let pointX = 0;
+let pointY = 0;
+let start = { x: 0, y: 0 };
+
+// Show preview when clicking on result image
+resultImg.addEventListener("click", () => {
+  if (resultImage) {
+    previewModal.classList.remove("hidden");
+    previewImage.src = resultImage;
+    resetZoomAndPan();
+  }
+});
+
+// Close preview
+closePreview.addEventListener("click", () => {
+  previewModal.classList.add("hidden");
+});
+
+// Zoom controls
+zoomIn.addEventListener("click", () => {
+  scale = Math.min(scale * 1.2, 5);
+  updatePreviewTransform();
+});
+
+zoomOut.addEventListener("click", () => {
+  scale = Math.max(scale / 1.2, 0.5);
+  updatePreviewTransform();
+});
+
+resetZoom.addEventListener("click", resetZoomAndPan);
+
+// Mouse wheel zoom
+previewImage.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  const delta = Math.sign(e.deltaY);
+  if (delta > 0) {
+    scale = Math.max(scale / 1.1, 0.5);
+  } else {
+    scale = Math.min(scale * 1.1, 5);
+  }
+  updatePreviewTransform();
+});
+
+// Pan functionality
+previewImage.addEventListener("mousedown", startPan);
+document.addEventListener("mousemove", pan);
+document.addEventListener("mouseup", () => (panning = false));
+
+// Touch support
+previewImage.addEventListener("touchstart", (e) => {
+  e.preventDefault();
+  start = {
+    x: e.touches[0].clientX - pointX,
+    y: e.touches[0].clientY - pointY,
+  };
+  panning = true;
+});
+
+previewImage.addEventListener("touchmove", (e) => {
+  e.preventDefault();
+  if (!panning) return;
+  pointX = e.touches[0].clientX - start.x;
+  pointY = e.touches[0].clientY - start.y;
+  updatePreviewTransform();
+});
+
+previewImage.addEventListener("touchend", () => (panning = false));
+
+function startPan(e) {
+  e.preventDefault();
+  start = { x: e.clientX - pointX, y: e.clientY - pointY };
+  panning = true;
+}
+
+function pan(e) {
+  if (!panning) return;
+  e.preventDefault();
+  pointX = e.clientX - start.x;
+  pointY = e.clientY - start.y;
+  updatePreviewTransform();
+}
+
+function updatePreviewTransform() {
+  previewImage.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
+}
+
+function resetZoomAndPan() {
+  scale = 1;
+  pointX = 0;
+  pointY = 0;
+  updatePreviewTransform();
+}
+
+// Close modal when clicking outside
+previewModal.addEventListener("click", (e) => {
+  if (e.target === previewModal) {
+    previewModal.classList.add("hidden");
+  }
+});
+
+// Prevent modal close when clicking inside
+previewModal.querySelector(".bg-white").addEventListener("click", (e) => {
+  e.stopPropagation();
+});

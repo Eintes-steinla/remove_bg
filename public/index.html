@@ -193,6 +193,93 @@
       </button>
     </div>
 
+    <!-- Add Preview Modal -->
+    <div
+      id="previewModal"
+      class="hidden z-50 fixed inset-0 bg-black/50 backdrop-blur-sm"
+    >
+      <div class="absolute inset-0 flex justify-center items-center p-4">
+        <div
+          class="relative bg-white dark:bg-slate-800 p-4 rounded-lg max-w-[90vw] max-h-[90vh]"
+        >
+          <!-- Close button -->
+          <button
+            id="closePreview"
+            class="top-2 right-2 absolute text-gray-500 hover:text-gray-700 dark:hover:text-gray-200 dark:text-gray-400"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+
+          <!-- Zoom controls -->
+          <div class="flex gap-2 mb-4">
+            <button
+              id="zoomOut"
+              class="bg-gray-200 dark:bg-slate-700 p-2 rounded text-gray-800 dark:text-white"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M20 12H4"
+                ></path>
+              </svg>
+            </button>
+            <button
+              id="resetZoom"
+              class="bg-gray-200 dark:bg-slate-700 px-3 py-2 rounded text-gray-800 dark:text-white"
+            >
+              <span data-lang="vi">Đặt lại</span>
+              <span data-lang="en" class="hidden">Reset</span>
+              <span data-lang="zh" class="hidden">重置</span>
+            </button>
+            <button
+              id="zoomIn"
+              class="bg-gray-200 dark:bg-slate-700 p-2 rounded text-gray-800 dark:text-white"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 4v16m8-8H4"
+                ></path>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Preview container -->
+          <div
+            class="bg-gray-100 dark:bg-slate-900 rounded w-full max-w-[800px] aspect-square overflow-hidden cursor-move"
+          >
+            <img id="previewImage" class="max-w-none" src="#" alt="" />
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="./script.js"></script>
   </body>
 </html>
