@@ -196,11 +196,11 @@
     <!-- Add Preview Modal -->
     <div
       id="previewModal"
-      class="hidden z-50 fixed inset-0 bg-black/50 backdrop-blur-sm"
+      class="z-50 fixed inset-0 bg-black/50 backdrop-blur-sm"
     >
       <div class="absolute inset-0 flex justify-center items-center p-4">
         <div
-          class="relative flex flex-col bg-white dark:bg-slate-800 p-4 rounded-lg max-w-[90vw] h-[90vh] overflow-hidden"
+          class="relative flex flex-col bg-white dark:bg-slate-800 p-4 rounded-lg max-w-[90vw] h-full max-h-[90vh] overflow-hidden"
         >
           <!-- Close button -->
           <button
@@ -272,12 +272,12 @@
 
           <!-- Preview container -->
           <div
-            class="flex justify-center items-center bg-gray-100 dark:bg-slate-900 rounded w-full h-full aspect-square overflow-hidden cursor-move"
+            class="flex flex-1 justify-center items-center bg-gray-100 dark:bg-slate-900 rounded w-full max-w-[800px] aspect-square overflow-hidden cursor-move"
           >
             <img
               id="previewImage"
               class="object-cover select-none"
-              src="#"
+              src="./5c7da23d-66e5-408b-87b7-26980abaae25.jpg"
               alt=""
             />
           </div>
@@ -285,6 +285,6 @@
       </div>
     </div>
 
-    <script src="./script.js"></script>
+    <script src="./public/script.js"></script>
   </body>
 </html>
